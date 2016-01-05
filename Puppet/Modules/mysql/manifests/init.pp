@@ -35,13 +35,13 @@ class mysql{
     user    => root,
     cwd     => '/usr/local',
     command => 'sudo yum install mariadb-server mariadb',
-    notify  =>Exec['iptables'],
+    notify  =>Exec['openTCPport'],
   }
   
-  exec { 'iptables'
+  exec { 'openTCPport'
     user    => root,
     cwd     => '/usr/local',
-    command => '-I INPUT -p tcp --dport 3306 -m state --state NEW,ESTABLISHED -j ACCEPT || -I OUTPUT -p tcp --sport 3306 -m state --state ESTABLISHED -j ACCEPT',
+    command => 'iptables -A INPUT -i eth0 -p tcp -m tcp --dport 3306 -j ACCEPT',
     notify  =>Exec['mysqldstart'],
   }
   
