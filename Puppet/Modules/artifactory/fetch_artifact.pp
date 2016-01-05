@@ -8,7 +8,7 @@ define artifactory::fetch_artifact (
   $repo        = 'libs-release-local',
   $filename    = undef,
   $source_file = undef,
-){
+  ){
 
   if $source_file {
     $sourcefile_real = $source_file

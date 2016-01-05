@@ -1,8 +1,4 @@
-class artifactory::config (
-  
-  $ajp_port = $::artifactory::ajp_port,
-  
-  ){
+class artifactory::config ( $ajp_port = $::artifactory::ajp_port, ){
 
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
