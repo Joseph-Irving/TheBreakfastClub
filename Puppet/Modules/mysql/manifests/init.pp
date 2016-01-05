@@ -16,11 +16,11 @@ class mysql{
 	notify  =>Exec['runInstaller'],
   }
   
-  exec { 'installmysql'
+  exec { 'runInstaller'
     user    => root,
     cwd     => '/usr/local',
     command => 'sudo rpm -ivh mysql57-community-release-el7-7.noarch.rpm',
-	notify  =>Exec['runInstaller'],
+	notify  =>Exec['installmysql'],
   }
   
   exec { 'installmysql'
@@ -28,7 +28,7 @@ class mysql{
     cwd     => '/usr/local',
     command => 'sudo yum install mysql-server || sudo /sbin/service mysqld start',
 	#sudo systemctl start mysqld
-	notify  =>Exec['runInstaller'],
+	notify  =>Exec['installmariadb'],
   }
   
   exec { 'installmariadb'
