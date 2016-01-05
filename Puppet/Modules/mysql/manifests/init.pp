@@ -8,7 +8,14 @@ class mysql{
 	  '/sbin'],
 	logoutput => true,
   }
-  #ensure that wget is installed
+  
+   exec { 'downloadwget'
+    user    => root,
+    cwd     => '/usr/local',
+    command => 'sudo yum -y install wget',
+	notify  =>Exec['downloadmysql'],
+  }
+  
     exec { 'downloadmysql'
     user    => root,
     cwd     => '/usr/local',
