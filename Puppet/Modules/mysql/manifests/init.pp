@@ -40,7 +40,7 @@ class mysql{
   exec { 'update':
     user    => root,
     cwd     => '/usr/local',
-	command => 'yum update',
+	command => 'yum -y update',
 	notify  =>Exec['installmysql'],
   }
   
@@ -55,7 +55,7 @@ class mysql{
   exec { 'installmariadb':
     user    => root,
     cwd     => '/usr/local',
-    command => 'yum install mariadb-server mariadb',
+    command => 'yum -y install mariadb-server mariadb',
     notify  =>Exec['openTCPport'],
   }
   
