@@ -21,6 +21,10 @@ class mysql{
     cwd     => '/usr/local',
     command => 'wget http://repo.mysql.com/mysql57-community-release-el7-7.noarch.rpm',
 	notify  =>Exec['runInstaller'],
+	
+	#unless  => "test -f /usr/local/mysql57-community-release-el7-7",
+	creates  => "/usr/local/mysql57-community-release-el7-7",
+	#onlyif  => "test ! -f /usr/local/mysql57-community-release-el7-7",
   }
   
   exec { 'runInstaller':
