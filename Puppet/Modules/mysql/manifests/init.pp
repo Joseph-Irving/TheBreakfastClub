@@ -31,13 +31,20 @@ class mysql{
     user    => root,
     cwd     => '/usr/local',
     command => 'rpm -ivh mysql57-community-release-el7-7.noarch.rpm',
+	notify  =>Exec['update'],
+  }
+  
+  exec { 'update':
+    user    => root,
+    cwd     => '/usr/local',
+	command => 'yum update'
 	notify  =>Exec['installmysql'],
   }
   
   exec { 'installmysql':
     user    => root,
     cwd     => '/usr/local',
-    command => 'yum install mysql-server ||  /sbin/service mysqld start',
+    command => 'yum -y install mysql-server',
 	#sudo systemctl start mysqld
 	notify  =>Exec['installmariadb'],
   }
