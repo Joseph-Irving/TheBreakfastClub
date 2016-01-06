@@ -1,11 +1,7 @@
 class artifactory::install {
 
-  #if $caller_module_name != $module_name {
-  #  fail("Use of private class ${name} by ${caller_module_name}")
-  #}
-
   File {
-    require => Package['artifactory'],
+    require => Package['jfrog-artifactory-oss-4.4.0.rpm'],
   }
 
   user { 'artifactory':
@@ -21,8 +17,8 @@ class artifactory::install {
     system => true,
   }
 
-  package { 'artifactory':
-    ensure   => latest,
+  package { 'jfrog-artifactory-oss-4.4.0.rpm':
+    ensure   => installed,
     require  => [ User['artifactory'], Group['artifactory'] ],
     notify   => Class['artifactory::service'],
   }

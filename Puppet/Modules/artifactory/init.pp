@@ -1,13 +1,6 @@
-class artifactory(
-  
-  $ensure           = 'latest',
-  $ajp_port         = 8019,
-  $data_path        = '/var/opt/jfrog/artifactory/data',
+class artifactory {
 
-  ) {
-
-  include ::java
-
+  class { 'java' } ->
   class { '::artifactory::install': } ->
   class { '::artifactory::config': } ->
   class { '::artifactory::service': }
