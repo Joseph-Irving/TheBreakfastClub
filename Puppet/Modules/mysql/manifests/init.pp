@@ -32,12 +32,15 @@ class mysql{
     cwd     => '/usr/local',
     command => 'rpm -ivh mysql57-community-release-el7-7.noarch.rpm',
 	notify  =>Exec['update'],
+	
+	creates  => "/usr/lib64/mysql/libmysqlclient.so.18",
+	
   }
   
   exec { 'update':
     user    => root,
     cwd     => '/usr/local',
-	command => 'yum update'
+	command => 'yum update',
 	notify  =>Exec['installmysql'],
   }
   
