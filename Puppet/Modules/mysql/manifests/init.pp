@@ -12,7 +12,7 @@ class mysql{
    exec { 'downloadwget':
     user    => root,
     cwd     => '/usr/local',
-    command => 'sudo yum -y install wget',
+    command => 'yum -y install wget',
 	notify  =>Exec['downloadmysql'],
   }
   
@@ -26,14 +26,14 @@ class mysql{
   exec { 'runInstaller':
     user    => root,
     cwd     => '/usr/local',
-    command => 'sudo rpm -ivh mysql57-community-release-el7-7.noarch.rpm',
+    command => 'rpm -ivh mysql57-community-release-el7-7.noarch.rpm',
 	notify  =>Exec['installmysql'],
   }
   
   exec { 'installmysql':
     user    => root,
     cwd     => '/usr/local',
-    command => 'sudo yum install mysql-server || sudo /sbin/service mysqld start',
+    command => 'yum install mysql-server ||  /sbin/service mysqld start',
 	#sudo systemctl start mysqld
 	notify  =>Exec['installmariadb'],
   }
@@ -41,7 +41,7 @@ class mysql{
   exec { 'installmariadb':
     user    => root,
     cwd     => '/usr/local',
-    command => 'sudo yum install mariadb-server mariadb',
+    command => 'yum install mariadb-server mariadb',
     notify  =>Exec['openTCPport'],
   }
   
@@ -55,13 +55,13 @@ class mysql{
   exec { 'mysqldstart':
     user    => root,
     cwd     => '/usr/local',
-    command => 'sudo /sbin/service mysqld start',
+    command => ' /sbin/service mysqld start',
     notify  =>Exec['startmariadb'],
   }
   
   exec { 'startmariadb':
     user    => root,
     cwd     => '/usr/local',
-    command => 'sudo systemctl start mariadb.service',
+    command => 'systemctl start mariadb.service',
   }
 }
