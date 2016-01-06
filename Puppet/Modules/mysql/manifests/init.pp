@@ -50,6 +50,7 @@ class mysql{
     command => 'yum -y install mysql-server',
 	#sudo systemctl start mysqld
 	notify  =>Exec['installmariadb'],
+	
   }
   
   exec { 'installmariadb':
@@ -57,6 +58,7 @@ class mysql{
     cwd     => '/usr/local',
     command => 'yum -y install mariadb-server mariadb',
     notify  =>Exec['openTCPport'],
+	timeout => 0,
   }
   
   exec { 'openTCPport':
