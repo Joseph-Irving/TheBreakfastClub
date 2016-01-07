@@ -1,8 +1,9 @@
 class artifactory::install {
-
-  File {
-    require => Package['jfrog-artifactory-oss-4.4.0.rpm'],
+ 
+  Exec {
+    path => '/usr/bin/',
   }
+  
 
   user { 'artifactory':
     ensure => 'present',
@@ -17,11 +18,25 @@ class artifactory::install {
     system => true,
   }
 
-  package { 'jfrog-artifactory-oss-4.4.0.rpm':
-    ensure   => installed,
-    require  => [ User['artifactory'], Group['artifactory'] ],
-    notify   => Class['artifactory::service'],
+  file {'/usr/jfrog-artifactory-oss-4.4.0.rpm':
+    ensure => present,
+    source => 'puppet:///modules/artifactory/jfrog-artifactory-oss-4.4.0.rpm',
+    owner  => root,
   }
+
+  exec {'local_install_artifactory':
+    require => File['/usr/jfrog-artifactory-oss-4.4.0.rpm'],
+    cwd     => '/usr/',
+    command => "yum localinstall -y jfrog-artifactory-oss-4.4.0.rpm",
+    user    => root,
+  }
+
+
+ # package { 'jfrog-artifactory-oss-4.4.0.rpm':
+ #   ensure   => installed,
+ #   require  => [ User['artifactory'], Group['artifactory'] ],
+ #   notify   => Class['artifactory::service'],
+ # }
 
   #if $::artifactory::data_path != '/var/opt/jfrog/artifactory/data' {
   #  file { $::artifactory::data_path:

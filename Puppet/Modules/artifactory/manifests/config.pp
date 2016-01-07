@@ -5,7 +5,7 @@ class artifactory::config {
     owner   => artifactory,
     group   => artifactory,
     mode    => '0444',
-    content => template('artifactory/server.xml.erb'),
+   #content => template('artifactory/server.xml.erb'),
     notify  => Class['artifactory::service'],
   }
 
