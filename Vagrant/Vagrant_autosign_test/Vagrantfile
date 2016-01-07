@@ -1,0 +1,86 @@
+Vagrant.configure(2) do |config|
+
+	# Notes about the code:
+		# hostname sets the fqdn, not the hostname...
+		# The GUI for the development environment is
+		# downloaded in a bash script
+		# Boxes are stored in C:/Users/USERNAME/.vagrant.d/boxes
+	
+	# General stuff
+	config.vm.box = "puppetlabs/centos-7.0-64-nocm"
+	config.vm.provider :virtualbox do |vb|
+		vb.memory = 1024
+		vb.cpus = 2
+		vb.gui = false
+	end
+	
+	config.vm.define "master_ast" do |master|
+		master.vm.box = "ubuntu/trusty64"
+		master.vm.network "public_network", ip: "192.168.1.220"
+		master.vm.hostname = "master.breakfastclub.com"
+		master.vm.provider :virtualbox do |vbmaster|
+			vbmaster.name = "BC Master Autosign"
+			vbmaster.memory = 7166
+		end
+		# Basic provisioning (update, facter, curl, vim)
+		master.vm.provision :shell, path: "ubuntuBasicBash.sh"
+		# Install enterprise
+		master.vm.provision :shell, path: "enterpriseInstall.sh"
+		# Edit /etc/hosts to include the master
+		# This does not need to be done on the agents when
+		# using PE
+		master.vm.provision :shell, path: "hostsMaster.sh"
+			master.vm.provision :shell, path: "editSitepp.sh"
+			# Note this must be run last, this will reboot the machine
+			master.vm.provision :shell, path: "setAutosignTrue.sh"
+	end
+	
+	config.vm.define "mysql_agent_ast" do |mysql_agent|
+		mysql_agent.vm.network "public_network", ip: "192.168.1.221"
+		mysql_agent.vm.hostname = "mysql.breakfastclub.com"
+		mysql_agent.vm.provider :virtualbox do |vbmysql|
+			vbmysql.name = "MySQL Autosign Test"
+		end
+		# Basic provisioning (update, facter, curl, vim)
+		mysql_agent.vm.provision :shell, path: "centOSBasicBash.sh"
+		mysql_agent.vm.provision :shell, path: "addMasterToHosts.sh"
+		mysql_agent.vm.provision :shell, path: "addAgent.sh"
+	end
+	
+	config.vm.define "travis_ant_agent_ast" do |travis_ant_agent|
+		travis_ant_agent.vm.network "public_network", ip: "192.168.1.222"
+		travis_ant_agent.vm.hostname = "travisAnt.breakfastclub.com"
+		travis_ant_agent.vm.provider :virtualbox do |vbta|
+			vbta.name = "BC Travis Ant Autosign Test"
+		end
+		travis_ant_agent.vm.provision :shell, path: "centOSBasicBash.sh"
+		travis_ant_agent.vm.provision :shell, path: "addMasterToHosts.sh"
+		travis_ant_agent.vm.provision :shell, path: "addAgent.sh"
+	end
+	
+	config.vm.define "artifactory_agent_ast" do |artifactory_agent|
+		artifactory_agent.vm.network "public_network", ip: "192.168.1.223"
+		artifactory_agent.vm.hostname = "artifactory.breakfastclub.com"
+		artifactory_agent.vm.provider :virtualbox do |vbartifactory|
+			vbartifactory.name = "BC Artifactory Autosign Test"
+		end
+		artifactory_agent.vm.provision :shell, path: "centOSBasicBash.sh"
+		artifactory_agent.vm.provision :shell, path: "addMasterToHosts.sh"
+		artifactory_agent.vm.provision :shell, path: "addAgent.sh"
+	end
+	
+	config.vm.define "development_agent1_ast" do |development_agent1|
+		development_agent1.vm.box = "chad-thompson/ubuntu-trusty64-gui"
+		development_agent1.vm.network "public_network", ip: "192.168.1.224"
+		development_agent1.vm.hostname = "dev1.breakfastclub.com"
+		development_agent1.vm.provider :virtualbox do |vbdev1|
+			vbdev1.name = "BC Development 1 Autosign Test"
+			vbdev1.gui = "true"
+		end
+		development_agent1.vm.provision :shell, path: "ubuntuBasicBash.sh"
+		development_agent1.vm.provision :shell, path: "ubuntuInstallGUI.sh"
+		development_agent1.vm.provision :shell, path: "addMasterToHosts.sh"
+		development_agent1.vm.provision :shell, path: "addAgent.sh"
+	end
+
+end
