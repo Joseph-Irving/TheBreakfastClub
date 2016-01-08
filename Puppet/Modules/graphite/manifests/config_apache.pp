@@ -1,12 +1,3 @@
-# == Class: graphite::config_apache
-#
-# This class configures apache to proxy requests to graphite web and SHOULD
-# NOT be called directly.
-#
-# === Parameters
-#
-# None.
-#
 class graphite::config_apache inherits graphite::params {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 

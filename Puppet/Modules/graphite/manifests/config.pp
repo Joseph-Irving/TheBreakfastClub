@@ -1,12 +1,3 @@
-# == Class: graphite::config
-#
-# This class configures graphite/carbon/whisper and SHOULD NOT
-# be called directly.
-#
-# === Parameters
-#
-# None.
-#
 class graphite::config inherits graphite::params {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
@@ -15,8 +6,6 @@ class graphite::config inherits graphite::params {
   #            python-django-tagging, python-simplejson
   # optional:  python-ldap, python-memcache, memcached, python-sqlite
 
-  # we need an web server with python support
-  # apache with mod_wsgi or nginx with gunicorn
   case $graphite::gr_web_server {
     'apache': {
       include graphite::config_apache

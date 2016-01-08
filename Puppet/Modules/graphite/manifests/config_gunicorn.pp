@@ -1,12 +1,3 @@
-# == Class: graphite::config_gunicorn
-#
-# This class configures graphite/carbon/whisper and SHOULD NOT be
-# called directly.
-#
-# === Parameters
-#
-# None.
-#
 class graphite::config_gunicorn inherits graphite::params {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 

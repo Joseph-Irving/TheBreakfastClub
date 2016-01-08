@@ -1,12 +1,3 @@
-# == Class: graphite::config_nginx
-#
-# This class configures nginx to talk to graphite/carbon/whisper and SHOULD
-# NOT be called directly.
-#
-# === Parameters
-#
-# None.
-#
 class graphite::config_nginx inherits graphite::params {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 

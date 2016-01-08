@@ -1,11 +1,3 @@
-# == Class: graphite::install
-#
-# This class installs graphite packages via pip
-#
-# === Parameters
-#
-# None.
-#
 class graphite::install inherits graphite::params {
 
   ## Validate
