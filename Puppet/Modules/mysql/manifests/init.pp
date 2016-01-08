@@ -19,7 +19,7 @@ class mysql{
     user    => root,
     cwd     => '/usr/local',
     command => 'wget http://repo.mysql.com/mysql57-community-release-el7-7.noarch.rpm',
-	notify  =>Exec['runInstaller'],
+	notify  => Exec['runInstaller'],
 	
 	#unless  => "test -f /usr/local/mysql57-community-release-el7-7",
 	creates  => "/usr/local/mysql57-community-release-el7-7",
@@ -30,7 +30,7 @@ class mysql{
     user    => root,
     cwd     => '/usr/local',
     command => 'rpm -ivh mysql57-community-release-el7-7.noarch.rpm',
-	notify  =>Exec['update'],
+	notify  => Exec['update'],
 	
 	creates  => "/usr/lib64/mysql/libmysqlclient.so.18",
   }
@@ -39,7 +39,7 @@ class mysql{
     user    => root,
     cwd     => '/usr/local',
 	command => 'yum -y update'
-	notify  =>Exec['installmysql'],
+	notify  => Exec['installmysql'],
   }
   
   exec { 'installmysql':
@@ -47,42 +47,42 @@ class mysql{
     cwd     => '/usr/local',
     command => 'yum -y install mysql-server',
 	#sudo systemctl start mysqld
-	notify  =>Exec['openTCPport'],
+	notify  => Exec['openTCPport'],
   }
   
   exec { 'openTCPport':
     user    => root,
     cwd     => '/usr/local',
     command => 'iptables -A INPUT -i eth0 -p tcp -m tcp --dport 3306 -j ACCEPT',
-    notify  =>Exec['mysqldstart'],
+    notify  => Exec['mysqldstart'],
   }
   
   exec { 'mysqldstart':
     user    => root,
     cwd     => '/usr/local',
     command => 'systemctl start mysqld',
-	notify  =>Exec['stopmysql'],
+	notify  => Exec['stopmysql'],
   }
   
   exec { 'stopmysql':
     user    => root,
     cwd     => '/usr/local',
     command => 'sudo systemctl stop mysqld || mysqld_safe --skip-grant-tables &',
-	notify  =>Exec['becomeroot']
+	notify  => Exec['becomeroot']
   }
   
     exec { 'becomeroot':
     user    => root,
     cwd     => '/usr/local',
     command => 'mysql -u root',
-	notify  =>Exec['changepassword']
+	notify  => Exec['changepassword']
   }
   
     exec { 'changepassword':
     user    => root,
     cwd     => '/usr/local',
     command => 'use mysql || update user SET PASSWORD=PASSWORD("netbuilder") WHERE USER='root'' || flush privileges || exit,
-	notify  =>Exec['startmysql']
+	notify  => Exec['startmysql']
   }
   
    exec { 'startmysql':

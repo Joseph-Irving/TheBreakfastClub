@@ -22,8 +22,10 @@ Vagrant.configure(2) do |config|
 			vbmaster.name = "BC Master"
 			vbmaster.memory = 7166
 		end
-		# Basic provisioning (update, facter, curl, vim)
+		# Basic provisioning (update, facter git, curl, vim)
 		master.vm.provision :shell, path: "ubuntuBasicBash.sh"
+		# Stuff from Joe's server
+		master.vm.provision :shell, path: "getFiles.sh"
 		# Install enterprise
 		master.vm.provision :shell, path: "enterpriseInstall.sh"
 		# Edit /etc/hosts to include the master
@@ -31,6 +33,8 @@ Vagrant.configure(2) do |config|
 		# using PE
 		master.vm.provision :shell, path: "hostsMaster.sh"
 		master.vm.provision :shell, path: "editSitepp.sh"
+		master.vm.provision :shell, path: "setAutosignTrue.sh"
+		master.vm.provision :shell, path: "gitPull.sh"
 	end
 	
 	config.vm.define "mysql_agent" do |mysql_agent|
