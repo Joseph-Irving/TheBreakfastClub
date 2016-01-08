@@ -15,6 +15,11 @@ class mysql::install{
 		ensure    => installed,
 		notify    => Exec['downloadmysql'],
   }
+
+    package { 'mysql-server':
+      ensure => present,
+      require => Exec['update'],
+    }
   
     exec { 'downloadmysql':
 		user    => root,
@@ -38,23 +43,15 @@ class mysql::install{
     exec { 'update':
 		user    => root,
 		cwd     => '/usr/local',
-		command => 'yum -y update'
-		notify  => Exec['installmysql'],
-  }
-  
-    exec { 'installmysql':
-		user    => root,
-		cwd     => '/usr/local',
-		command => 'yum -y install mysql-server',
-		#sudo systemctl start mysqld
-		notify  => Exec['openTCPport'],
+		command => 'yum -y update',
+		notify  => Package['mysql-server'],
   }
   
     exec { 'openTCPport':
 		user    => root,
 		cwd     => '/usr/local',
 		command => 'iptables -A INPUT -i eth0 -p tcp -m tcp --dport 3306 -j ACCEPT',
-		notify  => Exec['mysqldstart'],
+		notify  => Service['mysqld'],
   }
 
     service { 'mysqld':
