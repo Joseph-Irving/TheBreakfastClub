@@ -188,8 +188,7 @@ class graphite (
   $gr_rendering_hosts_timeout             = '1.0',
   $gr_prefetch_cache                      = undef
 ) inherits graphite::params {
-  # Validation of input variables.
-  # TODO - validate all the things
+
   validate_string($gr_use_remote_user_auth)
 
   # validate bools
@@ -208,11 +207,6 @@ class graphite (
   validate_integer($gr_apache_port)
   validate_integer($gr_apache_port_https)
 
-  # The anchor resources allow the end user to establish relationships
-  # to the "main" class and preserve the relationship to the
-  # implementation classes through a transitive relationship to
-  # the composite class.
-  # https://projects.puppetlabs.com/projects/puppet/wiki/Anchor_Pattern
   Anchor['graphite::begin']->
   Class['graphite::install']~>
   Class['graphite::config']->

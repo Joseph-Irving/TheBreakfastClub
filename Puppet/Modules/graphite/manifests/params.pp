@@ -87,7 +87,6 @@ class graphite::params {
         'python-zope-interface',
       ]
 
-      # see https://github.com/graphite-project/carbon/issues/86
       case $::operatingsystemrelease {
         /^6\.\d+$/: {
           $apache_24    = false

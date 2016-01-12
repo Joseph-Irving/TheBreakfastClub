@@ -1,11 +1,6 @@
 class graphite::config inherits graphite::params {
   Exec { path => '/bin:/usr/bin:/usr/sbin' }
 
-  # for full functionality we need this packages:
-  # mandatory: python-cairo, python-django, python-twisted,
-  #            python-django-tagging, python-simplejson
-  # optional:  python-ldap, python-memcache, memcached, python-sqlite
-
   case $graphite::gr_web_server {
     'apache': {
       include graphite::config_apache
@@ -13,20 +8,17 @@ class graphite::config inherits graphite::params {
     }
 
     'nginx': {
-      # Configure gunicorn and nginx.
       include graphite::config_gunicorn
       include graphite::config_nginx
       $web_server_package_require = [Package['nginx']]
     }
 
     'wsgionly': {
-      # Configure gunicorn only without nginx.
       include graphite::config_gunicorn
       $web_server_package_require = undef
     }
 
     'none': {
-      # Don't configure apache, gunicorn or nginx. Leave all webserver configuration to something external.
       $web_server_package_require = undef
     }
 
@@ -35,8 +27,6 @@ class graphite::config inherits graphite::params {
     }
   }
 
-  # first init of user db for graphite
-
   exec { 'Initial django db creation':
     command     => 'python manage.py syncdb --noinput',
     cwd         => '/opt/graphite/webapp/graphite',
@@ -44,8 +34,6 @@ class graphite::config inherits graphite::params {
     require     => File['/opt/graphite/webapp/graphite/local_settings.py'],
     subscribe   => Class['graphite::install'],
   }~>
-
-  # change access permissions for web server
 
   file {
     [
@@ -61,9 +49,6 @@ class graphite::config inherits graphite::params {
       mode    => '0755',
       owner   => $::graphite::gr_web_user;
   }
-
-  # change access permissions for carbon-cache to align with gr_user
-  # (if different from web_user)
 
   if $::graphite::gr_user != '' {
     $carbon_user  = $::graphite::gr_user
@@ -88,7 +73,6 @@ class graphite::config inherits graphite::params {
       owner   => $carbon_user;
   }
 
-  # Lets ensure graphite.db owner is the same as gr_web_user
   file {
     '/opt/graphite/storage/graphite.db':
       ensure  => file,
