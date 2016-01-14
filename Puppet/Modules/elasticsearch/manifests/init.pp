@@ -19,7 +19,7 @@ class elasticsearch {
   
   file {'/etc/yum.repos.d/elasticsearch.repo':
     ensure => present,
-	source => puppet:///modules/elasticsearch/elasticsearch.repo',
+	source => 'puppet:///modules/elasticsearch/elasticsearch.repo',
 	owner  => root,
   }
   
