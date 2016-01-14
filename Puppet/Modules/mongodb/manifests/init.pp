@@ -21,13 +21,13 @@ class mongodb {
     command => 'yum install -y mongodb-org',
 	require => File['/etc/yum.repos.d/mongodb.repo'],
 	user    => root,
-	before  => Exec['restart_mongod']
+	before  => Exec['restart_mongod'],
   }
   
   exec {'restart_mongod':
-    command => '/etc/init.d/mongod restart'
+    command => '/etc/init.d/mongod restart',
 	user    => root,
-	before  => Exec['auto_mongod']
+	before  => Exec['auto_mongod'],
   }
   
   exec {'auto_mongod':
