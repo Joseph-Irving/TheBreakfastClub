@@ -24,9 +24,10 @@ class graylog::install {
   }
   
    file {'/etc/graylog/web/graylog-web-interface.conf':
-    ensure => present,
-	source => 'puppet:///modules/graylog/graylog-web-interface.conf',
-	owner  => root,
+    ensure  => present,
+	source  => 'puppet:///modules/graylog/graylog-web-interface.conf',
+	owner   => root,
+	require => Exec{'install_graylog'],
   }
   
    exec {'set_secretgray':
