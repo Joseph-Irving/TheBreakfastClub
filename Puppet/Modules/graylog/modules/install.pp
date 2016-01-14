@@ -1,5 +1,0 @@
-class graylog::install {
-  
-  
-
-}
