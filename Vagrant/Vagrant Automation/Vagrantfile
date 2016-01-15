@@ -34,6 +34,9 @@ Vagrant.configure(2) do |config|
 		master.vm.provision :shell, path: "hostsMaster.sh"
 		master.vm.provision :shell, path: "editSitepp.sh"
 		master.vm.provision :shell, path: "gitPull.sh"
+		master.vm.provision :shell, path: "moveModules.sh"
+		master.vm.provision :shell, path: "moduleFiles.sh"
+		# Contains a restart - this must come last.
 		master.vm.provision :shell, path: "setAutosignTrue.sh"
 	end
 	
@@ -51,13 +54,14 @@ Vagrant.configure(2) do |config|
 	
 	config.vm.define "travis_ant_agent" do |travis_ant_agent|
 		travis_ant_agent.vm.network "public_network", ip: "192.168.1.212"
-		travis_ant_agent.vm.hostname = "travisAnt.breakfastclub.com"
+		travis_ant_agent.vm.hostname = "travisant.breakfastclub.com"
 		travis_ant_agent.vm.provider :virtualbox do |vbta|
 			vbta.name = "BC Travis Ant"
 		end
 		travis_ant_agent.vm.provision :shell, path: "centOSBasicBash.sh"
 		travis_ant_agent.vm.provision :shell, path: "addMasterToHosts.sh"
 		travis_ant_agent.vm.provision :shell, path: "addAgent.sh"
+		# travis_ant_agent.vm.provision :shell, path: "puppetTest.sh"
 	end
 	
 	config.vm.define "artifactory_agent" do |artifactory_agent|
@@ -69,6 +73,7 @@ Vagrant.configure(2) do |config|
 		artifactory_agent.vm.provision :shell, path: "centOSBasicBash.sh"
 		artifactory_agent.vm.provision :shell, path: "addMasterToHosts.sh"
 		artifactory_agent.vm.provision :shell, path: "addAgent.sh"
+		# artifactory_agent.vm.provision :shell, path: "puppetTest.sh"
 	end
 	
 	config.vm.define "development_agent1" do |development_agent1|
@@ -83,6 +88,19 @@ Vagrant.configure(2) do |config|
 		development_agent1.vm.provision :shell, path: "ubuntuInstallGUI.sh"
 		development_agent1.vm.provision :shell, path: "addMasterToHosts.sh"
 		development_agent1.vm.provision :shell, path: "addAgent.sh"
+		# development_agent1.vm.provision :shell, path: "puppetTest.sh"
+	end
+	
+	config.vm.define "graylog_agent" do |graylog_agent|
+		graylog_agent.vm.network "public_network", ip: "192.168.1.215"
+		graylog_agent.vm.hostname = "graylog.breakfastclub.com"
+		graylog_agent.vm.provider :virtualbox do |vbgraylog|
+			vbgraylog.name = "BC Graylog"
+		end
+		graylog_agent.vm.provision :shell, path: "centOSBasicBash.sh"
+		graylog_agent.vm.provision :shell, path: "addMasterToHosts.sh"
+		graylog_agent.vm.provision :shell, path: "addAgent.sh"
+		# artifactory_agent.vm.provision :shell, path: "puppetTest.sh"
 	end
 
 end
